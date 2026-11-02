@@ -133,26 +133,32 @@ let mapeamentoVirus = {
 
   baixo: {
     frames: [
-      { x: 330, y: 10 },
-      { x: 330, y: 315 },
-      { x: 345, y: 620 },
-      { x: 335, y: 925 },
-      { x: 330, y: 1230 }
+      { x: 392, y: 0 },
+      { x: 392, y: 190 },
+      { x: 392, y: 375 },
+      { x: 392, y: 560 },
+      { x: 392, y: 745 },
+      { x: 392, y: 930 },
+      { x: 392, y: 1115 },
+      { x: 392, y: 1300 }
     ],
-    frameWidth: 360,
-    frameHeight: 320
+    frameWidth: 240,
+    frameHeight: 190
   },
 
   cima: {
     frames: [
-      { x: 350, y: 10 },
-      { x: 350, y: 310 },
-      { x: 350, y: 620 },
-      { x: 350, y: 935 },
-      { x: 350, y: 1240 }
+      { x: 392, y: 0 },
+      { x: 392, y: 190 },
+      { x: 392, y: 375 },
+      { x: 392, y: 560 },
+      { x: 392, y: 745 },
+      { x: 392, y: 930 },
+      { x: 392, y: 1115 },
+      { x: 392, y: 1300 }
     ],
-    frameWidth: 320,
-    frameHeight: 310
+    frameWidth: 240,
+    frameHeight: 190
   }
 };
 
@@ -302,7 +308,7 @@ function preload() {
     )
   };
 
-   // Spritesheets do Vírus
+  // Spritesheets do Vírus
   virusSprites = {
     direita: loadImage(
       "Assets/Vírus/Vírus.png"
@@ -312,9 +318,16 @@ function preload() {
       "Assets/Vírus/Vírus - Esquerda.png"
     ),
 
-  }
+    baixo: loadImage(
+      "Assets/Vírus/Virus - Baixo.png"
+    ),
 
-  // Animações do Bug usando a classe Animacao.js
+    cima: loadImage(
+      "Assets/Vírus/Virus - Cima.png"
+    )
+  };
+
+  // Animações do Bug
   animacoesBug = {
     direita: new Animacao(
       mapeamentoBug.direita,
@@ -336,11 +349,9 @@ function preload() {
       bugSprites.cima
     )
   };
-}
 
-// Animações do Vírus usando a classe Animacao.js
-
-animacoesVirus = {
+  // Animações do Vírus
+  animacoesVirus = {
     direita: new Animacao(
       mapeamentoVirus.direita,
       virusSprites.direita
@@ -351,7 +362,17 @@ animacoesVirus = {
       virusSprites.esquerda
     ),
 
-  }
+    baixo: new Animacao(
+      mapeamentoVirus.baixo,
+      virusSprites.baixo
+    ),
+
+    cima: new Animacao(
+      mapeamentoVirus.cima,
+      virusSprites.cima
+    )
+  };
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -432,6 +453,7 @@ function criarCavalo() {
 // CRIAR BUG
 function criarBug() {
   console.log("Função criarBug foi chamada!");
+
   let locaisSpawn = [
     { x: 0, y: height * 0.27 },
     { x: 0, y: height * 0.30 },
@@ -453,21 +475,21 @@ function criarBug() {
   let local = random(locaisSpawn);
 
   bugs.push(
-    
     new Inimigo(
       local.x,
       local.y,
       null,
       animacoesBug
     )
-    
-  )
+  );
+
   console.log("Quantidade de Bugs:", bugs.length);
 }
 
 // CRIAR VÍRUS
 function criarVirus() {
   console.log("Função criarVirus foi chamada!");
+
   let locaisSpawn = [
     { x: 0, y: height * 0.27 },
     { x: 0, y: height * 0.30 },
@@ -488,17 +510,16 @@ function criarVirus() {
 
   let local = random(locaisSpawn);
 
-  viruses.push(
-    
+  virus.push(
     new Inimigo(
       local.x,
       local.y,
       null,
       animacoesVirus
     )
-    
-  )
-  console.log("Quantidade de Vírus:", viruses.length);
+  );
+
+  console.log("Quantidade de Vírus:", virus.length);
 }
 
 function draw() {
@@ -521,23 +542,40 @@ function draw() {
       tempoTransicaoRound = millis();
     }
 
-    // Espera 5 segundos antes do anúncio da rodada 2.
+    // Fim da rodada 2: todos os Bugs foram derrotados.
+    if (
+      roundAtual === 2 &&
+      total_bugs_criados >= maxBugs &&
+      bugs.length === 0 &&
+      estadoRound === "round2"
+    ) {
+      estadoRound = "transicao";
+      tempoTransicaoRound = millis();
+    }
+
+    // Espera 5 segundos antes de anunciar a próxima rodada.
     if (
       estadoRound === "transicao" &&
       millis() - tempoTransicaoRound >= 5000
     ) {
-      roundAtual = 2;
+      roundAtual++;
+
       estadoRound = "anunciando";
       tempoTransicaoRound = millis();
     }
 
-    // Mostra ROUND 2 por 5 segundos.
+    // Mostra o anúncio e inicia a próxima rodada após 5 segundos.
     if (
       estadoRound === "anunciando" &&
       millis() - tempoTransicaoRound >= 5000
     ) {
-      estadoRound = "round2";
-      tempoUltimoSpawnBug = millis();
+      if (roundAtual === 2) {
+        estadoRound = "round2";
+        tempoUltimoSpawnBug = millis();
+      } else if (roundAtual === 3) {
+        estadoRound = "round3";
+        tempoUltimoSpawnVirus = millis();
+      }
     }
 
     // Surgimento gradual dos cavalos na rodada 1.
@@ -565,6 +603,19 @@ function draw() {
 
       total_bugs_criados++;
       tempoUltimoSpawnBug = millis();
+    }
+
+    // Surgimento gradual dos Vírus na rodada 3.
+    if (
+      roundAtual === 3 &&
+      estadoRound === "round3" &&
+      total_virus_criados < maxVirus &&
+      millis() - tempoUltimoSpawnVirus >= 5000
+    ) {
+      criarVirus();
+
+      total_virus_criados++;
+      tempoUltimoSpawnVirus = millis();
     }
 
     // Atualiza e desenha os cavalos.
@@ -611,6 +662,28 @@ function draw() {
       bug.mostrarVida();
     }
 
+    // Atualiza e desenha os Vírus.
+    for (let inimigoVirus of virus) {
+      let distanciaJogador = dist(
+        inimigoVirus.x + inimigoVirus.largura / 2,
+        inimigoVirus.y + inimigoVirus.altura / 2,
+        jogador.x + jogador.largura / 2,
+        jogador.y + jogador.altura / 2
+      );
+
+      if (distanciaJogador <= 200) {
+        inimigoVirus.mover(jogador);
+        inimigoVirus.atacar(jogador);
+      } else {
+        inimigoVirus.mover(servidor);
+        inimigoVirus.atacar(servidor);
+      }
+
+      inimigoVirus.animar();
+      inimigoVirus.mostrar();
+      inimigoVirus.mostrarVida();
+    }
+
     // Game Over.
     if (
       servidor.foiDestruido() ||
@@ -623,7 +696,8 @@ function draw() {
   // Anúncio da rodada 2.
   if (
     estadoJogo === "jogando" &&
-    estadoRound === "anunciando"
+    estadoRound === "anunciando" &&
+    roundAtual === 2
   ) {
     push();
 
@@ -637,6 +711,28 @@ function draw() {
     textSize(64);
     textFont(fonte);
     text("ROUND 2", width / 2, height / 2 - 50);
+
+    pop();
+  }
+
+  // Anúncio da rodada 3.
+  if (
+    estadoJogo === "jogando" &&
+    estadoRound === "anunciando" &&
+    roundAtual === 3
+  ) {
+    push();
+
+    fill(0, 0, 0, 180);
+    rectMode(CORNER);
+    noStroke();
+    rect(0, 0, width, height);
+
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(64);
+    textFont(fonte);
+    text("ROUND 3", width / 2, height / 2 - 50);
 
     pop();
   }
@@ -753,8 +849,8 @@ function atualizarTiros() {
 
     let acertou = false;
 
-    // Os tiros podem acertar cavalos ou Bugs.
-    let listasInimigos = [cavalos, bugs];
+    // Os tiros podem acertar cavalos, Bugs e Vírus.
+    let listasInimigos = [cavalos, bugs, virus];
 
     for (let lista of listasInimigos) {
       for (let j = lista.length - 1; j >= 0; j--) {
