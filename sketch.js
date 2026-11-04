@@ -201,7 +201,7 @@ let hitboxes = [
 ];
 
 function preload() {
-  cenario = loadImage("Assets/cenário/Cenario.png");
+  cenario = loadImage("Assets/cenário/cenario.png");
 
   fonte = loadFont(
     "Assets/font/PixelifySans-VariableFont_wght.ttf"
@@ -528,6 +528,17 @@ function draw() {
     return;
   }
 
+  if (
+  roundAtual === 3 &&
+  estadoRound === "round3" &&
+  total_virus_criados >= maxVirus &&
+  virus.length === 0 &&
+  !servidor.foiDestruido() &&
+  jogador.vida > 0
+) {
+  estadoJogo = "vitoria";
+}
+
   if (estadoJogo === "jogando") {
     jogar();
 
@@ -685,12 +696,13 @@ function draw() {
     }
 
     // Game Over.
-    if (
-      servidor.foiDestruido() ||
-      jogador.vida <= 0
-    ) {
-      estadoJogo = "gameover";
-    }
+    if (estadoJogo === "gameover") {
+  telaFinal("GAME OVER", color(255, 80, 80));
+}
+
+if (estadoJogo === "vitoria") {
+  telaFinal("VITÓRIA!", color(100, 255, 150));
+}
   }
 
   // Anúncio da rodada 2.
@@ -769,6 +781,20 @@ function mousePressed() {
       tempoUltimoSpawn = millis();
     }
   }
+}
+
+function telaFinal(titulo, cor) {
+  background(0);
+  textFont(fonte);
+  textAlign(CENTER, CENTER);
+
+  fill(cor);
+  textSize(80);
+  text(titulo, width / 2, height / 2 - 40);
+
+  fill(255);
+  textSize(28);
+  text("Clique ou pressione R para jogar de novo", width / 2, height / 2 + 40);
 }
 
 function jogar() {
