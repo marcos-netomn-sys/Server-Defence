@@ -8,6 +8,7 @@ let estadoJogo = "menu";
 let spritesBotao = [];
 let logoFrames = [];
 let musicaMenu;
+let telasRound = [];
 
 let sprites = {
   baixo: [],
@@ -208,6 +209,12 @@ function preload() {
   );
 
   backmenu = loadImage("Assets/cenário/menu.png");
+  telasRound = [
+    null,
+    loadImage("Assets/cenário/round_1.png"),
+    loadImage("Assets/cenário/round_2.png"),
+    loadImage("Assets/cenário/round_3.png")
+  ];
 
   musicaMenu = loadSound("Assets/audio/music_menu.mp3");
 
@@ -529,15 +536,17 @@ function draw() {
   }
 
   if (
-  roundAtual === 3 &&
-  estadoRound === "round3" &&
-  total_virus_criados >= maxVirus &&
-  virus.length === 0 &&
-  !servidor.foiDestruido() &&
-  jogador.vida > 0
-) {
-  estadoJogo = "vitoria";
-}
+    estadoJogo === "jogando" &&
+    (jogador.vida <= 0 || servidor.foiDestruido())
+  ) {
+    estadoJogo = "gameover";
+  }
+
+  if ( estadoJogo === "jogando" && roundAtual === 3 && estadoRound === "round3" && total_virus_criados >= maxVirus &&
+    virus.length === 0
+  ) {
+    estadoJogo = "vitoria";
+  }
 
   if (estadoJogo === "jogando") {
     jogar();
@@ -580,7 +589,11 @@ function draw() {
       estadoRound === "anunciando" &&
       millis() - tempoTransicaoRound >= 5000
     ) {
-      if (roundAtual === 2) {
+      if (roundAtual === 1) {
+        estadoRound = "jogando";
+        tempoInicioJogo = millis();
+        tempoUltimoSpawn = millis();
+      } else if (roundAtual === 2) {
         estadoRound = "round2";
         tempoUltimoSpawnBug = millis();
       } else if (roundAtual === 3) {
@@ -695,73 +708,33 @@ function draw() {
       inimigoVirus.mostrarVida();
     }
 
-    // Game Over.
-    if (estadoJogo === "gameover") {
-  telaFinal("GAME OVER", color(255, 80, 80));
-}
-
-if (estadoJogo === "vitoria") {
-  telaFinal("VITÓRIA!", color(100, 255, 150));
-}
+    if (jogador.vida <= 0 || servidor.foiDestruido()) {
+      estadoJogo = "gameover";
+    }
   }
 
-  // Anúncio da rodada 2.
   if (
     estadoJogo === "jogando" &&
-    estadoRound === "anunciando" &&
-    roundAtual === 2
+    estadoRound === "anunciando"
   ) {
-    push();
-
-    fill(0, 0, 0, 180);
-    rectMode(CORNER);
-    noStroke();
-    rect(0, 0, width, height);
-
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(64);
-    textFont(fonte);
-    text("ROUND 2", width / 2, height / 2 - 50);
-
-    pop();
-  }
-
-  // Anúncio da rodada 3.
-  if (
-    estadoJogo === "jogando" &&
-    estadoRound === "anunciando" &&
-    roundAtual === 3
-  ) {
-    push();
-
-    fill(0, 0, 0, 180);
-    rectMode(CORNER);
-    noStroke();
-    rect(0, 0, width, height);
-
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(64);
-    textFont(fonte);
-    text("ROUND 3", width / 2, height / 2 - 50);
-
-    pop();
-  }
-
-  // Game Over.
-  if (estadoJogo === "gameover") {
-    background(0);
-
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(80);
-    textFont(fonte);
-    text("GAME OVER", width / 2, height / 2);
-  }
+    mostrarAnuncioRound();
+  }  if (estadoJogo === "gameover") {
+    telaFinal("GAME OVER", color(255, 80, 80));
+  } else if (estadoJogo === "vitoria") {
+    telaFinal("VITÓRIA!", color(100, 255, 150));
+   }
 }
 
 function mousePressed() {
+  if (estadoJogo === "gameover" || estadoJogo === "vitoria") {
+    if (clicouBotaoFinal("reiniciar")) {
+      iniciarJogo();
+    } else if (clicouBotaoFinal("menu")) {
+      estadoJogo = "menu";
+    }
+    return;
+  }
+
   if (estadoJogo === "menu") {
     userStartAudio();
 
@@ -775,12 +748,65 @@ function mousePressed() {
         musicaMenu.stop();
       }
 
-      estadoJogo = "jogando";
-
-      tempoInicioJogo = millis();
-      tempoUltimoSpawn = millis();
+      iniciarJogo();
     }
   }
+}
+
+function iniciarJogo() {
+  cavalos.length = 0;
+  bugs.length = 0;
+  virus.length = 0;
+  tiros.length = 0;
+
+  jogador.x = width / 2;
+  jogador.y = height * 0.65;
+  jogador.vida = jogador.vidaMaxima;
+  jogador.direcao = "baixo";
+  jogador.andando = false;
+  jogador.frameAtual = 0;
+  jogador.tempoFrame = 0;
+
+  servidor.vida = servidor.vidaMaxima;
+  posicionarServidor();
+
+  total_cavalos_criados = 0;
+  total_bugs_criados = 0;
+  total_virus_criados = 0;
+  roundAtual = 1;
+  estadoRound = "anunciando";
+
+  tempoInicioJogo = millis();
+  tempoUltimoSpawn = tempoInicioJogo;
+  tempoUltimoSpawnBug = tempoInicioJogo;
+  tempoUltimoSpawnVirus = tempoInicioJogo;
+  tempoTransicaoRound = tempoInicioJogo;
+
+  estadoJogo = "jogando";
+}
+
+function dimensoesBotoesFinais() {
+  let largura = Math.min(220, (width - 48) / 2);
+  let altura = 58;
+  let espacamento = 16;
+  let y = height / 2 + 34;
+  let xReiniciar = (width - largura * 2 - espacamento) / 2;
+
+  return {
+    reiniciar: { x: xReiniciar, y, largura, altura },
+    menu: { x: xReiniciar + largura + espacamento, y, largura, altura }
+  };
+}
+
+function clicouBotaoFinal(acao) {
+  let botao = dimensoesBotoesFinais()[acao];
+
+  return (
+    mouseX >= botao.x &&
+    mouseX <= botao.x + botao.largura &&
+    mouseY >= botao.y &&
+    mouseY <= botao.y + botao.altura
+  );
 }
 
 function telaFinal(titulo, cor) {
@@ -789,12 +815,43 @@ function telaFinal(titulo, cor) {
   textAlign(CENTER, CENTER);
 
   fill(cor);
-  textSize(80);
-  text(titulo, width / 2, height / 2 - 40);
+  textSize(Math.min(80, width / 10));
+  text(titulo, width / 2, height / 2 - 58);
+
+  let botoes = dimensoesBotoesFinais();
+  noStroke();
+  fill(70, 110, 190);
+  rect(botoes.reiniciar.x, botoes.reiniciar.y, botoes.reiniciar.largura, botoes.reiniciar.altura, 8);
+  fill(80);
+  rect(botoes.menu.x, botoes.menu.y, botoes.menu.largura, botoes.menu.altura, 8);
 
   fill(255);
-  textSize(28);
-  text("Clique ou pressione R para jogar de novo", width / 2, height / 2 + 40);
+  textSize(18);
+  text("REINICIAR (R)", botoes.reiniciar.x + botoes.reiniciar.largura / 2, botoes.reiniciar.y + botoes.reiniciar.altura / 2);
+  text("MENU (M)", botoes.menu.x + botoes.menu.largura / 2, botoes.menu.y + botoes.menu.altura / 2);
+}
+
+function mostrarAnuncioRound() {
+  let imagemRound = telasRound[roundAtual];
+
+  if (!imagemRound || imagemRound.width === 0) {
+    return;
+  }
+
+  push();
+  fill(0, 0, 0, 180);
+  noStroke();
+  rect(0, 0, width, height);
+
+  let proporcao = imagemRound.width / imagemRound.height;
+  let largura = Math.min(width * 0.48, height * 1.5);
+  let altura = largura / proporcao;
+  let progresso = constrain((millis() - tempoTransicaoRound) / 5000, 0, 1);
+  let x = width - progresso * (width + largura);
+  let y = (height - altura) / 2;
+
+  image(imagemRound, x, y, largura, altura);
+  pop();
 }
 
 function jogar() {
@@ -860,6 +917,15 @@ function jogar() {
 }
 
 function keyPressed() {
+  if (estadoJogo === "gameover" || estadoJogo === "vitoria") {
+    if (key.toLowerCase() === "r") {
+      iniciarJogo();
+    } else if (key.toLowerCase() === "m") {
+      estadoJogo = "menu";
+    }
+    return;
+  }
+
   if (estadoJogo === "jogando") {
     if (key === " ") {
       atirar();
