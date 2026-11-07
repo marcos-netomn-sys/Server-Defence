@@ -221,8 +221,8 @@ function preload() {
     loadImage("Assets/cenário/round_3.png")
   ];
 
-  imgGameOver = loadImage("Assets/cenário/GameOver.png");
-  imgVitoria = loadImage("Assets/cenário/Vitória.png");
+  imgGameOver = loadImage("Assets/cenário/Gameover.png");
+  imgVitoria = loadImage("Assets/cenário/Vitoria.png");
   imgReiniciar = loadImage("Assets/cenário/Reiniciarbuttom.png");
   imgMenu = loadImage("Assets/cenário/Menubuttom.png");
 
@@ -540,27 +540,14 @@ function criarVirus() {
 }
 
 function draw() {
-  if (estadoJogo === "menu") {
-    menu.mostrar();
-    return;
-  }
+  if (jogador.vida <= 0 || servidor.foiDestruido()) {
+  capturarFundoFinal();
+  estadoJogo = "gameover";
+}
 
-  if (
-    estadoJogo === "jogando" &&
-    (jogador.vida <= 0 || servidor.foiDestruido())
-  ) {
-    capturarFundoFinal();
-    estadoJogo = "gameover";
-  }
-
-  if (
-    estadoJogo === "jogando" &&
-    roundAtual === 3 &&
-    estadoRound === "round3" &&
-    total_virus_criados >= maxVirus &&
+  if ( estadoJogo === "jogando" && roundAtual === 3 && estadoRound === "round3" && total_virus_criados >= maxVirus &&
     virus.length === 0
   ) {
-    capturarFundoFinal();
     estadoJogo = "vitoria";
   }
 
@@ -724,11 +711,7 @@ function draw() {
       inimigoVirus.mostrarVida();
     }
 
-    if (jogador.vida <= 0 || servidor.foiDestruido()) {
-      capturarFundoFinal();
-      estadoJogo = "gameover";
-    }
-
+    
   }
 
   if (
@@ -736,11 +719,18 @@ function draw() {
     estadoRound === "anunciando"
   ) {
     mostrarAnuncioRound();
-  }
-
-  if (estadoJogo === "gameover" || estadoJogo === "vitoria") {
+  }  if (estadoJogo === "gameover") {
     telaFinal();
-  }
+  } else if (
+  estadoJogo === "jogando" &&
+  roundAtual === 3 &&
+  estadoRound === "round3" &&
+  total_virus_criados >= maxVirus &&
+  virus.length === 0
+) {
+  capturarFundoFinal();
+  estadoJogo = "vitoria";
+}
 }
 
 function mousePressed() {
