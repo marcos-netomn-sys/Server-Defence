@@ -1,4 +1,9 @@
-
+let imgGameOver;
+let imgVitoria;
+let imgReiniciar;
+let imgMenu;
+let fundoFinal;
+let fundoFinalCapturado = false;
 let cenario;
 let backmenu;
 let jogador;
@@ -215,6 +220,11 @@ function preload() {
     loadImage("Assets/cenário/round_2.png"),
     loadImage("Assets/cenário/round_3.png")
   ];
+
+  imgGameOver = loadImage("Assets/cenário/GameOver.png");
+  imgVitoria = loadImage("Assets/cenário/Vitória.png");
+  imgReiniciar = loadImage("Assets/cenário/Reiniciarbuttom.png");
+  imgMenu = loadImage("Assets/cenário/Menubuttom.png");
 
   musicaMenu = loadSound("Assets/audio/music_menu.mp3");
 
@@ -539,12 +549,18 @@ function draw() {
     estadoJogo === "jogando" &&
     (jogador.vida <= 0 || servidor.foiDestruido())
   ) {
+    capturarFundoFinal();
     estadoJogo = "gameover";
   }
 
-  if ( estadoJogo === "jogando" && roundAtual === 3 && estadoRound === "round3" && total_virus_criados >= maxVirus &&
+  if (
+    estadoJogo === "jogando" &&
+    roundAtual === 3 &&
+    estadoRound === "round3" &&
+    total_virus_criados >= maxVirus &&
     virus.length === 0
   ) {
+    capturarFundoFinal();
     estadoJogo = "vitoria";
   }
 
@@ -709,8 +725,10 @@ function draw() {
     }
 
     if (jogador.vida <= 0 || servidor.foiDestruido()) {
+      capturarFundoFinal();
       estadoJogo = "gameover";
     }
+
   }
 
   if (
@@ -718,11 +736,11 @@ function draw() {
     estadoRound === "anunciando"
   ) {
     mostrarAnuncioRound();
-  }  if (estadoJogo === "gameover") {
-    telaFinal("GAME OVER", color(255, 80, 80));
-  } else if (estadoJogo === "vitoria") {
-    telaFinal("VITÓRIA!", color(100, 255, 150));
-   }
+  }
+
+  if (estadoJogo === "gameover" || estadoJogo === "vitoria") {
+    telaFinal();
+  }
 }
 
 function mousePressed() {
@@ -754,6 +772,8 @@ function mousePressed() {
 }
 
 function iniciarJogo() {
+  fundoFinal = null;
+fundoFinalCapturado = false;
   cavalos.length = 0;
   bugs.length = 0;
   virus.length = 0;
@@ -809,26 +829,53 @@ function clicouBotaoFinal(acao) {
   );
 }
 
-function telaFinal(titulo, cor) {
-  background(0);
-  textFont(fonte);
-  textAlign(CENTER, CENTER);
+function telaFinal() {
+  if (fundoFinal) {
+    image(fundoFinal, 0, 0, width, height);
+  } else {
+    background(0);
+  }
 
-  fill(cor);
-  textSize(Math.min(80, width / 10));
-  text(titulo, width / 2, height / 2 - 58);
+  noStroke();
+  fill(0, 0, 0, 145);
+  rect(0, 0, width, height);
+
+  let imagemTitulo;
+
+  if (estadoJogo === "gameover") {
+    imagemTitulo = imgGameOver;
+  } else {
+    imagemTitulo = imgVitoria;
+  }
+
+  let larguraTitulo = Math.min(width * 0.65, 700);
+  let alturaTitulo = larguraTitulo * imagemTitulo.height / imagemTitulo.width;
+
+  image(
+    imagemTitulo,
+    (width - larguraTitulo) / 2,
+    height * 0.18,
+    larguraTitulo,
+    alturaTitulo
+  );
 
   let botoes = dimensoesBotoesFinais();
-  noStroke();
-  fill(70, 110, 190);
-  rect(botoes.reiniciar.x, botoes.reiniciar.y, botoes.reiniciar.largura, botoes.reiniciar.altura, 8);
-  fill(80);
-  rect(botoes.menu.x, botoes.menu.y, botoes.menu.largura, botoes.menu.altura, 8);
 
-  fill(255);
-  textSize(18);
-  text("REINICIAR (R)", botoes.reiniciar.x + botoes.reiniciar.largura / 2, botoes.reiniciar.y + botoes.reiniciar.altura / 2);
-  text("MENU (M)", botoes.menu.x + botoes.menu.largura / 2, botoes.menu.y + botoes.menu.altura / 2);
+  image(
+    imgReiniciar,
+    botoes.reiniciar.x,
+    botoes.reiniciar.y,
+    botoes.reiniciar.largura,
+    botoes.reiniciar.altura
+  );
+
+  image(
+    imgMenu,
+    botoes.menu.x,
+    botoes.menu.y,
+    botoes.menu.largura,
+    botoes.menu.altura
+  );
 }
 
 function mostrarAnuncioRound() {
@@ -989,9 +1036,11 @@ function atualizarTiros() {
   pop();
 }
 
-function mostrarHitboxes() {
-  for (let i = 0; i < hitboxes.length; i++) {
-    hitboxes[i].mostrar();
+function capturarFundoFinal() {
+  if (!fundoFinalCapturado) {
+    fundoFinal = get();
+    fundoFinal.filter(BLUR, 4);
+    fundoFinalCapturado = true;
   }
 }
 
