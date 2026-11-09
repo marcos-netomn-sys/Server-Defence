@@ -176,11 +176,13 @@ class Inimigo {
   }
 
   inimigoHitbox() {
+    const margemX = this.largura * 0.18;
+    const margemY = this.altura * 0.18;
     return {
-      x: this.x,
-      y: this.y,
-      largura: this.largura,
-      altura: this.altura
+      x: this.x + margemX,
+      y: this.y + margemY,
+      largura: this.largura - margemX * 2,
+      altura: this.altura - margemY * 2
     };
   }
 

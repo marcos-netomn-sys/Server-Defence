@@ -10,6 +10,7 @@ let jogador;
 let menu;
 let fonte;
 let estadoJogo = "menu";
+let hitboxesVisiveis = false;
 let spritesBotao = [];
 let logoFrames = [];
 let musicaMenu;
@@ -427,9 +428,21 @@ function posicionarServidor() {
 }
 
 function atirar() {
+  const centroX = jogador.x + jogador.largura / 2;
+  const centroY = jogador.y + jogador.altura / 2 + 6;
+  const recuo = 12;
+  let x = centroX;
+  let y = centroY;
+
+  // O projétil nasce junto à borda do personagem voltada para o disparo.
+  if (jogador.direcao === "cima") y = jogador.y + recuo + 6;
+  if (jogador.direcao === "baixo") y = jogador.y + jogador.altura - recuo + 6;
+  if (jogador.direcao === "esquerda") x = jogador.x + recuo;
+  if (jogador.direcao === "direita") x = jogador.x + jogador.largura - recuo;
+
   let tiro = new Tiro(
-    jogador.x + jogador.largura / 2,
-    jogador.y + jogador.altura / 2,
+    x,
+    y,
     jogador.direcao
   );
 
@@ -739,9 +752,45 @@ function draw() {
     mostrarAnuncioRound();
   }
 
+  if (estadoJogo === "jogando" && hitboxesVisiveis) {
+    mostrarHitboxes();
+  }
+
   if (estadoJogo === "gameover" || estadoJogo === "vitoria") {
     telaFinal();
   }
+}
+
+function mostrarHitboxes() {
+  push();
+  noFill();
+  strokeWeight(2);
+
+  // Obstáculos do cenário.
+  for (let hitbox of hitboxes) {
+    hitbox.mostrar();
+  }
+
+  // Jogador: caixa efetiva usada por checarColisao().
+  const caixaJogador = jogador.hitbox();
+  stroke(0, 255, 0);
+  rect(caixaJogador.x, caixaJogador.y, caixaJogador.largura, caixaJogador.altura);
+
+  // Servidor.
+  let caixaServidor = servidor.serverHitbox();
+  stroke(255, 220, 0);
+  rect(caixaServidor.x, caixaServidor.y, caixaServidor.largura, caixaServidor.altura);
+
+  // Inimigos atingidos pelos tiros.
+  stroke(255, 0, 255);
+  for (let lista of [cavalos, bugs, virus]) {
+    for (let inimigo of lista) {
+      let caixa = inimigo.inimigoHitbox();
+      rect(caixa.x, caixa.y, caixa.largura, caixa.altura);
+    }
+  }
+
+  pop();
 }
 
 function mousePressed() {
@@ -979,6 +1028,11 @@ function keyPressed() {
   }
 
   if (estadoJogo === "jogando") {
+    if (key.toLowerCase() === "h") {
+      hitboxesVisiveis = !hitboxesVisiveis;
+      return;
+    }
+
     if (key === " ") {
       atirar();
     }

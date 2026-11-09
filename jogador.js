@@ -86,18 +86,24 @@ class Jogador {
     );
   }
 
+  hitbox() {
+    // A arte tem transparência nas bordas; a colisão fica no corpo central.
+    return {
+      x: this.x + this.largura * 0.22,
+      y: this.y + this.altura * 0.20,
+      largura: this.largura * 0.56,
+      altura: this.altura * 0.60
+    };
+  }
 
   checarColisao(outro) {
-
-
-
+    const caixaJogador = this.hitbox();
     return (
-      jogador.x + 10 < outro.x + outro.largura &&
-      jogador.x - 20 + jogador.largura > outro.x &&
-      jogador.y + 10 < outro.y + outro.altura &&
-      jogador.y - 10 + jogador.altura > outro.y
+      caixaJogador.x < outro.x + outro.largura &&
+      caixaJogador.x + caixaJogador.largura > outro.x &&
+      caixaJogador.y < outro.y + outro.altura &&
+      caixaJogador.y + caixaJogador.altura > outro.y
     );
-
   }
   receberDano(dano) {
 
