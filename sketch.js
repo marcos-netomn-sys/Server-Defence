@@ -20,7 +20,7 @@ let sprites = {
   baixo: [],
   cima: [],
   direita: [],
-  esquerda: []
+  esquerda: [],
 };
 
 let tiros = [];
@@ -29,7 +29,7 @@ let cavaloSprites = {
   direita: [],
   esquerda: [],
   cima: [],
-  baixo: []
+  baixo: [],
 };
 
 let servidor;
@@ -66,10 +66,10 @@ let mapeamentoBug = {
       { x: 380, y: 300 },
       { x: 710, y: 300 },
       { x: 1060, y: 300 },
-      { x: 1410, y: 300 }
+      { x: 1410, y: 300 },
     ],
     frameWidth: 350,
-    frameHeight: 320
+    frameHeight: 320,
   },
 
   esquerda: {
@@ -78,10 +78,10 @@ let mapeamentoBug = {
       { x: 370, y: 320 },
       { x: 730, y: 320 },
       { x: 1060, y: 320 },
-      { x: 1420, y: 320 }
+      { x: 1420, y: 320 },
     ],
     frameWidth: 350,
-    frameHeight: 320
+    frameHeight: 320,
   },
 
   baixo: {
@@ -90,10 +90,10 @@ let mapeamentoBug = {
       { x: 330, y: 315 },
       { x: 345, y: 620 },
       { x: 335, y: 925 },
-      { x: 330, y: 1230 }
+      { x: 330, y: 1230 },
     ],
     frameWidth: 360,
-    frameHeight: 320
+    frameHeight: 320,
   },
 
   cima: {
@@ -102,11 +102,11 @@ let mapeamentoBug = {
       { x: 350, y: 310 },
       { x: 350, y: 620 },
       { x: 350, y: 935 },
-      { x: 350, y: 1240 }
+      { x: 350, y: 1240 },
     ],
     frameWidth: 320,
-    frameHeight: 310
-  }
+    frameHeight: 310,
+  },
 };
 
 let bugSprites = {};
@@ -116,26 +116,26 @@ let animacoesBug = {};
 let mapeamentoVirus = {
   direita: {
     frames: [
-      { x: 10, y: 300 },
-      { x: 380, y: 300 },
-      { x: 710, y: 300 },
-      { x: 1060, y: 300 },
-      { x: 1410, y: 300 }
+      { x: 10, y: 100 },
+      { x: 380, y: 100 },
+      { x: 710, y: 100 },
+      { x: 1060, y: 100 },
+      { x: 1410, y: 100 },
     ],
     frameWidth: 350,
-    frameHeight: 320
+    frameHeight: 320,
   },
 
   esquerda: {
     frames: [
-      { x: 20, y: 320 },
-      { x: 370, y: 320 },
-      { x: 730, y: 320 },
-      { x: 1060, y: 320 },
-      { x: 1420, y: 320 }
+      { x: 20, y: 100 },
+      { x: 370, y: 100 },
+      { x: 730, y: 100 },
+      { x: 1060, y: 100 },
+      { x: 1420, y: 100 },
     ],
     frameWidth: 350,
-    frameHeight: 320
+    frameHeight: 320,
   },
 
   baixo: {
@@ -147,10 +147,10 @@ let mapeamentoVirus = {
       { x: 392, y: 745 },
       { x: 392, y: 930 },
       { x: 392, y: 1115 },
-      { x: 392, y: 1300 }
+      { x: 392, y: 1300 },
     ],
     frameWidth: 240,
-    frameHeight: 190
+    frameHeight: 190,
   },
 
   cima: {
@@ -162,11 +162,11 @@ let mapeamentoVirus = {
       { x: 392, y: 745 },
       { x: 392, y: 930 },
       { x: 392, y: 1115 },
-      { x: 392, y: 1300 }
+      { x: 392, y: 1300 },
     ],
     frameWidth: 240,
-    frameHeight: 190
-  }
+    frameHeight: 190,
+  },
 };
 
 let virusSprites = {};
@@ -188,7 +188,7 @@ class Hitbox {
       this.x * width,
       this.y * height,
       this.largura * width,
-      this.altura * height
+      this.altura * height,
     );
   }
 }
@@ -204,22 +204,20 @@ let hitboxes = [
   new Hitbox(0.85, 0.2, 0.075, 0.1),
 
   new Hitbox(0.06, 0.68, 0.075, 0.1),
-  new Hitbox(0.86, 0.68, 0.075, 0.1)
+  new Hitbox(0.86, 0.68, 0.075, 0.1),
 ];
 
 function preload() {
   cenario = loadImage("Assets/cenário/cenario.png");
 
-  fonte = loadFont(
-    "Assets/font/PixelifySans-VariableFont_wght.ttf"
-  );
+  fonte = loadFont("Assets/font/PixelifySans-VariableFont_wght.ttf");
 
   backmenu = loadImage("Assets/cenário/menu.png");
   telasRound = [
     null,
     loadImage("Assets/cenário/round_1.png"),
     loadImage("Assets/cenário/round_2.png"),
-    loadImage("Assets/cenário/round_3.png")
+    loadImage("Assets/cenário/round_3.png"),
   ];
 
   imgGameOver = loadImage("Assets/cenário/GameOver.png");
@@ -239,7 +237,7 @@ function preload() {
     loadImage("Assets/logo/frame_7.png"),
     loadImage("Assets/logo/frame_8.png"),
     loadImage("Assets/logo/frame_9.png"),
-    loadImage("Assets/logo/frame_10.png")
+    loadImage("Assets/logo/frame_10.png"),
   ];
 
   spritesBotao = [
@@ -247,180 +245,133 @@ function preload() {
     loadImage("Assets/botao_frames_jogar/botao_frame_2_jogar.png"),
     loadImage("Assets/botao_frames_jogar/botao_frame_3_jogar.png"),
     loadImage("Assets/botao_frames_jogar/botao_frame_4_jogar.png"),
-    loadImage("Assets/botao_frames_jogar/botao_frame_5_jogar.png")
+    loadImage("Assets/botao_frames_jogar/botao_frame_5_jogar.png"),
   ];
 
   // Sprites do jogador
   sprites.baixo = [
     loadImage("Assets/Personagem/baixo/parado.png"),
     loadImage("Assets/Personagem/baixo/Passo1.png"),
-    loadImage("Assets/Personagem/baixo/Passo2.png")
+    loadImage("Assets/Personagem/baixo/Passo2.png"),
   ];
 
   sprites.cima = [
     loadImage("Assets/Personagem/cima/parado.png"),
     loadImage("Assets/Personagem/cima/passo1.png"),
-    loadImage("Assets/Personagem/cima/passo2.png")
+    loadImage("Assets/Personagem/cima/passo2.png"),
   ];
 
   sprites.direita = [
     loadImage("Assets/Personagem/direita/Parado.png"),
     loadImage("Assets/Personagem/direita/passo1.png"),
-    loadImage("Assets/Personagem/direita/passo2.png")
+    loadImage("Assets/Personagem/direita/passo2.png"),
   ];
 
   sprites.esquerda = [
     loadImage("Assets/Personagem/esquerda/Parado.png"),
     loadImage("Assets/Personagem/esquerda/passo1.png"),
-    loadImage("Assets/Personagem/esquerda/passo2.png")
+    loadImage("Assets/Personagem/esquerda/passo2.png"),
   ];
 
   // Sprites dos cavalos de Troia
   cavaloSprites.direita = [
     loadImage("Assets/Cavalo De Troia/direita/CT_parado.png"),
-    loadImage("Assets/Cavalo De Troia/direita/CT_passo1.png")
+    loadImage("Assets/Cavalo De Troia/direita/CT_passo1.png"),
   ];
 
   cavaloSprites.cima = [
     loadImage("Assets/Cavalo De Troia/cima/CT_cima_parado1.png"),
-    loadImage("Assets/Cavalo De Troia/cima/CT_cima_passo1.png")
+    loadImage("Assets/Cavalo De Troia/cima/CT_cima_passo1.png"),
   ];
 
   cavaloSprites.esquerda = [
     loadImage("Assets/Cavalo De Troia/esquerda/CT_parado.png"),
     loadImage("Assets/Cavalo De Troia/esquerda/CT_passo1.png"),
     loadImage("Assets/Cavalo De Troia/esquerda/CT_passo2.png"),
-    loadImage("Assets/Cavalo De Troia/esquerda/CT_passo3.png")
+    loadImage("Assets/Cavalo De Troia/esquerda/CT_passo3.png"),
   ];
 
   cavaloSprites.baixo = [
     loadImage("Assets/Cavalo De Troia/baixo/CT_baixo_parado.png"),
     loadImage("Assets/Cavalo De Troia/baixo/CT_baixo_passo1.png"),
     loadImage("Assets/Cavalo De Troia/baixo/CT_baixo_passo2.png"),
-    loadImage("Assets/Cavalo De Troia/baixo/CT_baixo_passo3.png")
+    loadImage("Assets/Cavalo De Troia/baixo/CT_baixo_passo3.png"),
   ];
 
   // Servidor e decoração
-  servidorImg = loadImage(
-    "Assets/Servidor/Servidor_frame1.png"
-  );
+  servidorImg = loadImage("Assets/Servidor/Servidor_frame1.png");
 
   plantinha = loadImage("Assets/plantinha.png.png");
 
   // Spritesheets do Bug
   bugSprites = {
     direita: loadImage(
-      "Assets/Aranha Robótica/Sprite de Aranha Robótica - Direita.png"
+      "Assets/Aranha Robótica/Sprite de Aranha Robótica - Direita.png",
     ),
 
     esquerda: loadImage(
-      "Assets/Aranha Robótica/Sprite de Aranha Robótica - Esquerda.png"
+      "Assets/Aranha Robótica/Sprite de Aranha Robótica - Esquerda.png",
     ),
 
     baixo: loadImage(
-      "Assets/Aranha Robótica/Sprite de Aranha Robótica - Baixo.png"
+      "Assets/Aranha Robótica/Sprite de Aranha Robótica - Baixo.png",
     ),
 
     cima: loadImage(
-      "Assets/Aranha Robótica/Sprite de Aranha Robótica - Cima.png"
-    )
+      "Assets/Aranha Robótica/Sprite de Aranha Robótica - Cima.png",
+    ),
   };
 
   // Spritesheets do Vírus
   virusSprites = {
-    direita: loadImage(
-      "Assets/Vírus/Vírus.png"
-    ),
+    direita: loadImage("Assets/Vírus/Vírus.png"),
 
-    esquerda: loadImage(
-      "Assets/Vírus/Vírus - Esquerda.png"
-    ),
+    esquerda: loadImage("Assets/Vírus/Vírus - Esquerda.png"),
 
-    baixo: loadImage(
-      "Assets/Vírus/Virus - Baixo.png"
-    ),
+    baixo: loadImage("Assets/Vírus/virus_baixo_spritesheet.png"),
 
-    cima: loadImage(
-      "Assets/Vírus/Virus - Cima.png"
-    )
+    cima: loadImage("Assets/Vírus/virus_costas_spritesheet.png"),
   };
 
   // Animações do Bug
   animacoesBug = {
-    direita: new Animacao(
-      mapeamentoBug.direita,
-      bugSprites.direita
-    ),
+    direita: new Animacao(mapeamentoBug.direita, bugSprites.direita),
 
-    esquerda: new Animacao(
-      mapeamentoBug.esquerda,
-      bugSprites.esquerda
-    ),
+    esquerda: new Animacao(mapeamentoBug.esquerda, bugSprites.esquerda),
 
-    baixo: new Animacao(
-      mapeamentoBug.baixo,
-      bugSprites.baixo
-    ),
+    baixo: new Animacao(mapeamentoBug.baixo, bugSprites.baixo),
 
-    cima: new Animacao(
-      mapeamentoBug.cima,
-      bugSprites.cima
-    )
+    cima: new Animacao(mapeamentoBug.cima, bugSprites.cima),
   };
 
   // Animações do Vírus
   animacoesVirus = {
-    direita: new Animacao(
-      mapeamentoVirus.direita,
-      virusSprites.direita
-    ),
+    direita: new Animacao(mapeamentoVirus.direita, virusSprites.direita),
 
-    esquerda: new Animacao(
-      mapeamentoVirus.esquerda,
-      virusSprites.esquerda
-    ),
+    esquerda: new Animacao(mapeamentoVirus.esquerda, virusSprites.esquerda),
 
-    baixo: new Animacao(
-      mapeamentoVirus.baixo,
-      virusSprites.baixo
-    ),
+    baixo: new Animacao(mapeamentoVirus.baixo, virusSprites.baixo),
 
-    cima: new Animacao(
-      mapeamentoVirus.cima,
-      virusSprites.cima
-    )
+    cima: new Animacao(mapeamentoVirus.cima, virusSprites.cima),
   };
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  menu = new Menu(
-    backmenu,
-    spritesBotao,
-    logoFrames,
-    fonte
-  );
+  menu = new Menu(backmenu, spritesBotao, logoFrames, fonte);
 
-  jogador = new Jogador(
-    width / 2,
-    height * 0.65,
-    sprites
-  );
+  jogador = new Jogador(width / 2, height * 0.65, sprites);
 
   posicionarServidor();
 }
 
 function posicionarServidor() {
-  let xServidor = width * 0.50 - 60;
+  let xServidor = width * 0.5 - 60;
   let yServidor = height * 0.43 - 55;
 
   if (!servidor) {
-    servidor = new Servidor(
-      xServidor,
-      yServidor,
-      servidorImg
-    );
+    servidor = new Servidor(xServidor, yServidor, servidorImg);
   } else {
     servidor.x = xServidor;
     servidor.y = yServidor;
@@ -440,11 +391,7 @@ function atirar() {
   if (jogador.direcao === "esquerda") x = jogador.x + recuo;
   if (jogador.direcao === "direita") x = jogador.x + jogador.largura - recuo;
 
-  let tiro = new Tiro(
-    x,
-    y,
-    jogador.direcao
-  );
+  let tiro = new Tiro(x, y, jogador.direcao);
 
   tiros.push(tiro);
 }
@@ -453,31 +400,25 @@ function atirar() {
 function criarCavalo() {
   let locaisSpawn = [
     { x: 0, y: height * 0.27 },
-    { x: 0, y: height * 0.30 },
+    { x: 0, y: height * 0.3 },
     { x: 0, y: height * 0.33 },
 
     { x: width, y: height * 0.27 },
-    { x: width, y: height * 0.30 },
+    { x: width, y: height * 0.3 },
     { x: width, y: height * 0.33 },
 
     { x: width * 0.47, y: 0 },
-    { x: width * 0.50, y: 0 },
+    { x: width * 0.5, y: 0 },
     { x: width * 0.53, y: 0 },
 
     { x: width * 0.47, y: height },
-    { x: width * 0.50, y: height },
-    { x: width * 0.53, y: height }
+    { x: width * 0.5, y: height },
+    { x: width * 0.53, y: height },
   ];
 
   let local = random(locaisSpawn);
 
-  cavalos.push(
-    new Inimigo(
-      local.x,
-      local.y,
-      cavaloSprites
-    )
-  );
+  cavalos.push(new Inimigo(local.x, local.y, cavaloSprites));
 }
 
 // CRIAR BUG
@@ -486,32 +427,25 @@ function criarBug() {
 
   let locaisSpawn = [
     { x: 0, y: height * 0.27 },
-    { x: 0, y: height * 0.30 },
+    { x: 0, y: height * 0.3 },
     { x: 0, y: height * 0.33 },
 
     { x: width, y: height * 0.27 },
-    { x: width, y: height * 0.30 },
+    { x: width, y: height * 0.3 },
     { x: width, y: height * 0.33 },
 
     { x: width * 0.47, y: 0 },
-    { x: width * 0.50, y: 0 },
+    { x: width * 0.5, y: 0 },
     { x: width * 0.53, y: 0 },
 
     { x: width * 0.47, y: height },
-    { x: width * 0.50, y: height },
-    { x: width * 0.53, y: height }
+    { x: width * 0.5, y: height },
+    { x: width * 0.53, y: height },
   ];
 
   let local = random(locaisSpawn);
 
-  bugs.push(
-    new Inimigo(
-      local.x,
-      local.y,
-      null,
-      animacoesBug
-    )
-  );
+  bugs.push(new Inimigo(local.x, local.y, null, animacoesBug));
 
   console.log("Quantidade de Bugs:", bugs.length);
 }
@@ -522,32 +456,25 @@ function criarVirus() {
 
   let locaisSpawn = [
     { x: 0, y: height * 0.27 },
-    { x: 0, y: height * 0.30 },
+    { x: 0, y: height * 0.3 },
     { x: 0, y: height * 0.33 },
 
     { x: width, y: height * 0.27 },
-    { x: width, y: height * 0.30 },
+    { x: width, y: height * 0.3 },
     { x: width, y: height * 0.33 },
 
     { x: width * 0.47, y: 0 },
-    { x: width * 0.50, y: 0 },
+    { x: width * 0.5, y: 0 },
     { x: width * 0.53, y: 0 },
 
     { x: width * 0.47, y: height },
-    { x: width * 0.50, y: height },
-    { x: width * 0.53, y: height }
+    { x: width * 0.5, y: height },
+    { x: width * 0.53, y: height },
   ];
 
   let local = random(locaisSpawn);
 
-  virus.push(
-    new Inimigo(
-      local.x,
-      local.y,
-      null,
-      animacoesVirus
-    )
-  );
+  virus.push(new Inimigo(local.x, local.y, null, animacoesVirus));
 
   console.log("Quantidade de Vírus:", virus.length);
 }
@@ -604,11 +531,9 @@ function draw() {
       tempoTransicaoRound = millis();
     }
 
+  
     // Espera 5 segundos antes de anunciar a próxima rodada.
-    if (
-      estadoRound === "transicao" &&
-      millis() - tempoTransicaoRound >= 5000
-    ) {
+    if (estadoRound === "transicao" && millis() - tempoTransicaoRound >= 5000) {
       roundAtual++;
 
       estadoRound = "anunciando";
@@ -630,8 +555,9 @@ function draw() {
       } else if (roundAtual === 3) {
         estadoRound = "round3";
         tempoUltimoSpawnVirus = millis();
-      }
+      
     }
+  }
 
     // Surgimento gradual dos cavalos na rodada 1.
     if (
@@ -673,13 +599,15 @@ function draw() {
       tempoUltimoSpawnVirus = millis();
     }
 
+    
+
     // Atualiza e desenha os cavalos.
     for (let cavalo of cavalos) {
       let distanciaJogador = dist(
         cavalo.x + cavalo.largura / 2,
         cavalo.y + cavalo.altura / 2,
         jogador.x + jogador.largura / 2,
-        jogador.y + jogador.altura / 2
+        jogador.y + jogador.altura / 2,
       );
 
       if (distanciaJogador <= 200) {
@@ -701,7 +629,7 @@ function draw() {
         bug.x + bug.largura / 2,
         bug.y + bug.altura / 2,
         jogador.x + jogador.largura / 2,
-        jogador.y + jogador.altura / 2
+        jogador.y + jogador.altura / 2,
       );
 
       if (distanciaJogador <= 200) {
@@ -723,7 +651,7 @@ function draw() {
         inimigoVirus.x + inimigoVirus.largura / 2,
         inimigoVirus.y + inimigoVirus.altura / 2,
         jogador.x + jogador.largura / 2,
-        jogador.y + jogador.altura / 2
+        jogador.y + jogador.altura / 2,
       );
 
       if (distanciaJogador <= 200) {
@@ -745,10 +673,7 @@ function draw() {
     }
   }
 
-  if (
-    estadoJogo === "jogando" &&
-    estadoRound === "anunciando"
-  ) {
+  if (estadoJogo === "jogando" && estadoRound === "anunciando") {
     mostrarAnuncioRound();
   }
 
@@ -774,12 +699,22 @@ function mostrarHitboxes() {
   // Jogador: caixa efetiva usada por checarColisao().
   const caixaJogador = jogador.hitbox();
   stroke(0, 255, 0);
-  rect(caixaJogador.x, caixaJogador.y, caixaJogador.largura, caixaJogador.altura);
+  rect(
+    caixaJogador.x,
+    caixaJogador.y,
+    caixaJogador.largura,
+    caixaJogador.altura,
+  );
 
   // Servidor.
   let caixaServidor = servidor.serverHitbox();
   stroke(255, 220, 0);
-  rect(caixaServidor.x, caixaServidor.y, caixaServidor.largura, caixaServidor.altura);
+  rect(
+    caixaServidor.x,
+    caixaServidor.y,
+    caixaServidor.largura,
+    caixaServidor.altura,
+  );
 
   // Inimigos atingidos pelos tiros.
   stroke(255, 0, 255);
@@ -827,7 +762,7 @@ function mousePressed() {
 
 function iniciarJogo() {
   fundoFinal = null;
-fundoFinalCapturado = false;
+  fundoFinalCapturado = false;
   cavalos.length = 0;
   bugs.length = 0;
   virus.length = 0;
@@ -868,7 +803,7 @@ function dimensoesBotoesFinais() {
 
   return {
     reiniciar: { x: xReiniciar, y, largura, altura },
-    menu: { x: xReiniciar + largura + espacamento, y, largura, altura }
+    menu: { x: xReiniciar + largura + espacamento, y, largura, altura },
   };
 }
 
@@ -903,14 +838,14 @@ function telaFinal() {
   }
 
   let larguraTitulo = Math.min(width * 0.65, 700);
-  let alturaTitulo = larguraTitulo * imagemTitulo.height / imagemTitulo.width;
+  let alturaTitulo = (larguraTitulo * imagemTitulo.height) / imagemTitulo.width;
 
   image(
     imagemTitulo,
     (width - larguraTitulo) / 2,
     height * 0.18,
     larguraTitulo,
-    alturaTitulo
+    alturaTitulo,
   );
 
   let botoes = dimensoesBotoesFinais();
@@ -920,7 +855,7 @@ function telaFinal() {
     botoes.reiniciar.x,
     botoes.reiniciar.y,
     botoes.reiniciar.largura,
-    botoes.reiniciar.altura
+    botoes.reiniciar.altura,
   );
 
   image(
@@ -928,7 +863,7 @@ function telaFinal() {
     botoes.menu.x,
     botoes.menu.y,
     botoes.menu.largura,
-    botoes.menu.altura
+    botoes.menu.altura,
   );
 }
 
@@ -956,13 +891,7 @@ function mostrarAnuncioRound() {
 }
 
 function jogar() {
-  image(
-    cenario,
-    0,
-    0,
-    width,
-    height
-  );
+  image(cenario, 0, 0, width, height);
 
   let xAnterior = jogador.x;
   let yAnterior = jogador.y;
@@ -981,7 +910,7 @@ function jogar() {
       x: hitbox.x * width,
       y: hitbox.y * height,
       largura: hitbox.largura * width,
-      altura: hitbox.altura * height
+      altura: hitbox.altura * height,
     };
 
     if (jogador.checarColisao(hitboxPixels)) {
@@ -1000,21 +929,9 @@ function jogar() {
   atualizarTiros();
 
   // Plantinhas decorativas.
-  image(
-    plantinha,
-    width * 0.065,
-    height * 0.20,
-    60,
-    60
-  );
+  image(plantinha, width * 0.065, height * 0.2, 60, 60);
 
-  image(
-    plantinha,
-    width * 0.05,
-    height * 0.67,
-    60,
-    60
-  );
+  image(plantinha, width * 0.05, height * 0.67, 60, 60);
 }
 
 function keyPressed() {
@@ -1084,13 +1001,13 @@ function atualizarTiros() {
   noStroke();
 
   fill(180, 100, 255, 15);
-  ellipse(width * 0.50, height * 0.43, 260, 200);
+  ellipse(width * 0.5, height * 0.43, 260, 200);
 
   fill(180, 100, 255, 25);
-  ellipse(width * 0.50, height * 0.43, 180, 140);
+  ellipse(width * 0.5, height * 0.43, 180, 140);
 
   fill(180, 100, 255, 35);
-  ellipse(width * 0.50, height * 0.43, 100, 80);
+  ellipse(width * 0.5, height * 0.43, 100, 80);
 
   pop();
 }
@@ -1104,10 +1021,8 @@ function capturarFundoFinal() {
 }
 
 function windowResized() {
-  resizeCanvas(
-    windowWidth,
-    windowHeight
-  );
+  resizeCanvas(windowWidth, windowHeight);
 
   posicionarServidor();
 }
+
