@@ -116,57 +116,51 @@ let animacoesBug = {};
 let mapeamentoVirus = {
   direita: {
     frames: [
-      { x: 10, y: 100 },
-      { x: 380, y: 100 },
-      { x: 710, y: 100 },
-      { x: 1060, y: 100 },
-      { x: 1410, y: 100 },
+      { x: 0, y: 190 },
+      { x: 408, y: 190 },
+      { x: 817, y: 190 },
+      { x: 1225, y: 190 },
+      { x: 1634, y: 190 }
     ],
-    frameWidth: 350,
-    frameHeight: 320,
+    frameWidth: 409,
+    frameHeight: 390
   },
 
   esquerda: {
     frames: [
-      { x: 20, y: 100 },
-      { x: 370, y: 100 },
-      { x: 730, y: 100 },
-      { x: 1060, y: 100 },
-      { x: 1420, y: 100 },
+      { x: 0, y: 190 },
+      { x: 408, y: 190 },
+      { x: 817, y: 190 },
+      { x: 1225, y: 190 },
+      { x: 1634, y: 190 }
     ],
-    frameWidth: 350,
-    frameHeight: 320,
+    frameWidth: 409,
+    frameHeight: 390
   },
 
   baixo: {
     frames: [
-      { x: 392, y: 0 },
-      { x: 392, y: 190 },
-      { x: 392, y: 375 },
-      { x: 392, y: 560 },
-      { x: 392, y: 745 },
-      { x: 392, y: 930 },
-      { x: 392, y: 1115 },
-      { x: 392, y: 1300 },
+      { x: 0, y: 0 },
+      { x: 373, y: 0 },
+      { x: 746, y: 0 },
+      { x: 1119, y: 0 },
+      { x: 1492, y: 0 }
     ],
-    frameWidth: 240,
-    frameHeight: 190,
+    frameWidth: 373,
+    frameHeight: 430
   },
 
   cima: {
     frames: [
-      { x: 392, y: 0 },
-      { x: 392, y: 190 },
-      { x: 392, y: 375 },
-      { x: 392, y: 560 },
-      { x: 392, y: 745 },
-      { x: 392, y: 930 },
-      { x: 392, y: 1115 },
-      { x: 392, y: 1300 },
+      { x: 0, y: 0 },
+      { x: 373, y: 0 },
+      { x: 746, y: 0 },
+      { x: 1119, y: 0 },
+      { x: 1492, y: 0 }
     ],
-    frameWidth: 240,
-    frameHeight: 190,
-  },
+    frameWidth: 373,
+    frameHeight: 430
+  }
 };
 
 let virusSprites = {};
