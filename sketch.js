@@ -52,6 +52,17 @@ let maxVirus = 8;
 let total_virus_criados = 0;
 let tempoUltimoSpawnVirus = 0;
 
+// FASE FINAL WARNING
+let maxInimigosWarning = 8;
+
+let totalCavalosWarning = 0;
+let totalBugsWarning = 0;
+let totalVirusWarning = 0;
+
+let tempoUltimoSpawnWarning = 0;
+let intervaloSpawnWarning = 1800;
+let tempoInicioWarning = 0;
+
 let roundAtual = 1;
 let estadoRound = "jogando";
 let tempoTransicaoRound = 0;
@@ -496,6 +507,25 @@ function draw() {
     total_virus_criados >= maxVirus &&
     virus.length === 0
   ) {
+    estadoRound = "aguardandoWarning";
+
+    totalCavalosWarning = 0;
+    totalBugsWarning = 0;
+    totalVirusWarning = 0;
+
+    tempoInicioWarning = millis();
+  }
+
+  if (
+    estadoJogo === "jogando" &&
+    estadoRound === "warning" &&
+    totalCavalosWarning >= maxInimigosWarning &&
+    totalBugsWarning >= maxInimigosWarning &&
+    totalVirusWarning >= maxInimigosWarning &&
+    cavalos.length === 0 &&
+    bugs.length === 0 &&
+    virus.length === 0
+  ) {
     capturarFundoFinal();
     estadoJogo = "vitoria";
   }
@@ -525,7 +555,7 @@ function draw() {
       tempoTransicaoRound = millis();
     }
 
-  
+
     // Espera 5 segundos antes de anunciar a próxima rodada.
     if (estadoRound === "transicao" && millis() - tempoTransicaoRound >= 5000) {
       roundAtual++;
@@ -549,9 +579,9 @@ function draw() {
       } else if (roundAtual === 3) {
         estadoRound = "round3";
         tempoUltimoSpawnVirus = millis();
-      
+
+      }
     }
-  }
 
     // Surgimento gradual dos cavalos na rodada 1.
     if (
@@ -593,7 +623,67 @@ function draw() {
       tempoUltimoSpawnVirus = millis();
     }
 
-    
+    // Surgimento dos inimigos durante a fase WARNING.
+    if (
+      estadoRound === "warning" &&
+      millis() - tempoUltimoSpawnWarning >= intervaloSpawnWarning
+    ) {
+      let tiposDisponiveis = [];
+
+      if (totalCavalosWarning < maxInimigosWarning) {
+        tiposDisponiveis.push("cavalo");
+      }
+
+      if (totalBugsWarning < maxInimigosWarning) {
+        tiposDisponiveis.push("bug");
+      }
+
+      if (totalVirusWarning < maxInimigosWarning) {
+        tiposDisponiveis.push("virus");
+      }
+
+      if (tiposDisponiveis.length > 0) {
+        let tipoEscolhido = random(tiposDisponiveis);
+
+        if (tipoEscolhido === "cavalo") {
+          criarCavalo();
+          cavalos[cavalos.length - 1].velocidade = 2.2;
+          totalCavalosWarning++;
+        }
+
+        if (tipoEscolhido === "bug") {
+          criarBug();
+          bugs[bugs.length - 1].velocidade = 2.2;
+          totalBugsWarning++;
+        }
+
+        if (tipoEscolhido === "virus") {
+          criarVirus();
+          virus[virus.length - 1].velocidade = 2.2;
+          totalVirusWarning++;
+        }
+      }
+
+      tempoUltimoSpawnWarning = millis();
+    }
+
+    // Espera 3 segundos antes de mostrar o WARNING.
+    if (
+      estadoRound === "aguardandoWarning" &&
+      millis() - tempoInicioWarning >= 3000
+    ) {
+      estadoRound = "avisoWarning";
+      tempoInicioWarning = millis();
+    }
+
+    // Mantém o aviso piscando durante 5 segundos.
+    if (
+      estadoRound === "avisoWarning" &&
+      millis() - tempoInicioWarning >= 5000
+    ) {
+      estadoRound = "warning";
+      tempoUltimoSpawnWarning = millis();
+    }
 
     // Atualiza e desenha os cavalos.
     for (let cavalo of cavalos) {
@@ -678,6 +768,36 @@ function draw() {
   if (estadoJogo === "gameover" || estadoJogo === "vitoria") {
     telaFinal();
   }
+
+  if (
+    estadoJogo === "jogando" &&
+    estadoRound === "warning"
+  ) {
+    mostrarWarning();
+  }
+}
+
+function mostrarWarning() {
+  let pulsacao = (sin(millis() / 250) + 1) / 2;
+  let transparencia = map(pulsacao, 0, 1, 35, 100);
+
+  push();
+
+  // Pulso vermelho sem escurecer a tela.
+  noStroke();
+  fill(255, 0, 0, transparencia);
+  rect(0, 0, width, height);
+
+  // Texto WARNING.
+  textAlign(CENTER, CENTER);
+  textFont(fonte);
+  textStyle(BOLD);
+  textSize(Math.min(width * 0.09, 90));
+
+  fill(255, 255, 255);
+  text("WARNING", width / 2, height * 0.13);
+
+  pop();
 }
 
 function mostrarHitboxes() {
@@ -761,6 +881,12 @@ function iniciarJogo() {
   bugs.length = 0;
   virus.length = 0;
   tiros.length = 0;
+  totalCavalosWarning = 0;
+  totalBugsWarning = 0;
+  totalVirusWarning = 0;
+  tempoUltimoSpawnWarning = 0;
+  tempoInicioWarning = 0;
+
 
   jogador.x = width / 2;
   jogador.y = height * 0.65;
