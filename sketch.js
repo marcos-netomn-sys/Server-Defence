@@ -1070,7 +1070,7 @@ function keyPressed() {
       return;
     }
 
-    if (key === " ") {
+    if (key === "RButton" || key === " ") {
       atirar();
     }
   }
