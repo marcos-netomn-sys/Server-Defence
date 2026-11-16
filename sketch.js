@@ -15,6 +15,7 @@ let spritesBotao = [];
 let logoFrames = [];
 let musicaMenu;
 let telasRound = [];
+let somTiro;
 
 let sprites = {
   baixo: [],
@@ -213,6 +214,8 @@ let hitboxes = [
 ];
 
 function preload() {
+
+  somTiro = loadSound("Assets/audio/tiro.mp3")
   cenario = loadImage("Assets/cenário/cenario.png");
 
   fonte = loadFont("Assets/font/PixelifySans-VariableFont_wght.ttf");
@@ -364,6 +367,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  somTiro.playMode("restart");
   menu = new Menu(backmenu, spritesBotao, logoFrames, fonte);
 
   jogador = new Jogador(width / 2, height * 0.65, sprites);
@@ -399,6 +403,11 @@ function atirar() {
   let tiro = new Tiro(x, y, jogador.direcao);
 
   tiros.push(tiro);
+
+if (somTiro && somTiro.isLoaded()) {
+  somTiro.setVolume(0.5); // ajuste o volume entre 0 e 1
+  somTiro.play();
+}
 }
 
 // CRIAR CAVALO DE TROIA
@@ -872,6 +881,10 @@ function mousePressed() {
       iniciarJogo();
     }
   }
+  if (estadoJogo === "jogando" && mouseButton === LEFT) {
+  atirar();
+  return false;
+}
 }
 
 function iniciarJogo() {
