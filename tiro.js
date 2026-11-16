@@ -1,5 +1,5 @@
 class Tiro {
-  constructor(x, y, direcao) {
+  constructor(x, y, direcao, tirosSprites, animacoesTiro) {
     this.x = x;
     this.y = y;
     this.direcao = direcao;
@@ -7,6 +7,8 @@ class Tiro {
     this.largura = 20;
     this.altura = 20;
     this.dano = 10;
+    this.tirosSprites = tirosSprites;
+    this.animacoesTiro = animacoesTiro;
   }
 
   mover() {
@@ -23,12 +25,7 @@ class Tiro {
   }
 
   saiuDaTela() {
-    return (
-      this.x < 0 ||
-      this.x > width ||
-      this.y < 0 ||
-      this.y > height
-    );
+    return this.x < 0 || this.x > width || this.y < 0 || this.y > height;
   }
 
   checarColisao(hitbox) {
@@ -39,7 +36,4 @@ class Tiro {
       this.y + this.altura / 2 > hitbox.y
     );
   }
-
-
 }
-
