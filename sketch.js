@@ -433,8 +433,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  somTiro.playMode("restart");
+  
   menu = new Menu(backmenu, spritesBotao, logoFrames, fonte);
 
   jogador = new Jogador(width / 2, height * 0.65, sprites);
