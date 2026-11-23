@@ -12,9 +12,10 @@ class Tiro {
 
     // Para a esquerda, utiliza o sprite da direita.
     this.sprite =
-      direcao === "esquerda"
-        ? tirosSprites.direita
-        : tirosSprites[direcao];
+      direcao === "esquerda" ? tirosSprites.direita : tirosSprites[direcao];
+
+    this.sprite =
+      direcao === "cima" ? tirosSprites.baixo : tirosSprites[direcao];
 
     this.frameAtual = 0;
     this.intervaloFrame = 80;
@@ -29,9 +30,7 @@ class Tiro {
         { x: 1024, y: 0, largura: 512, altura: 682 },
         { x: 1536, y: 0, largura: 512, altura: 682 },
       ];
-    } 
-
-    else if (direcao === "cima") {
+    } else if (direcao === "cima") {
       this.frames = [
         { x: 350, y: 10, largura: 320, altura: 310 },
         { x: 350, y: 310, largura: 320, altura: 310 },
@@ -39,9 +38,7 @@ class Tiro {
         { x: 350, y: 935, largura: 320, altura: 310 },
         { x: 350, y: 1240, largura: 320, altura: 296 },
       ];
-    } 
-
-    else {
+    } else {
       this.frames = [
         { x: 330, y: 10, largura: 360, altura: 320 },
         { x: 330, y: 315, largura: 360, altura: 320 },
@@ -118,11 +115,9 @@ class Tiro {
         frame.x,
         frame.y,
         frame.largura,
-        frame.altura
+        frame.altura,
       );
-    } 
-
-    else {
+    } else {
       image(
         this.sprite,
         this.x,
@@ -132,7 +127,7 @@ class Tiro {
         frame.x,
         frame.y,
         frame.largura,
-        frame.altura
+        frame.altura,
       );
     }
 
@@ -140,12 +135,7 @@ class Tiro {
   }
 
   saiuDaTela() {
-    return (
-      this.x < 0 ||
-      this.x > width ||
-      this.y < 0 ||
-      this.y > height
-    );
+    return this.x < 0 || this.x > width || this.y < 0 || this.y > height;
   }
 
   checarColisao(hitbox) {

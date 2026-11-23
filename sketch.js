@@ -185,10 +185,10 @@ let mapeamentoVirus = {
       { x: 408, y: 190 },
       { x: 817, y: 190 },
       { x: 1225, y: 190 },
-      { x: 1634, y: 190 }
+      { x: 1634, y: 190 },
     ],
     frameWidth: 409,
-    frameHeight: 390
+    frameHeight: 390,
   },
 
   esquerda: {
@@ -197,10 +197,10 @@ let mapeamentoVirus = {
       { x: 408, y: 190 },
       { x: 817, y: 190 },
       { x: 1225, y: 190 },
-      { x: 1634, y: 190 }
+      { x: 1634, y: 190 },
     ],
     frameWidth: 409,
-    frameHeight: 390
+    frameHeight: 390,
   },
 
   baixo: {
@@ -209,10 +209,10 @@ let mapeamentoVirus = {
       { x: 373, y: 0 },
       { x: 746, y: 0 },
       { x: 1119, y: 0 },
-      { x: 1492, y: 0 }
+      { x: 1492, y: 0 },
     ],
     frameWidth: 373,
-    frameHeight: 430
+    frameHeight: 430,
   },
 
   cima: {
@@ -221,11 +221,11 @@ let mapeamentoVirus = {
       { x: 373, y: 0 },
       { x: 746, y: 0 },
       { x: 1119, y: 0 },
-      { x: 1492, y: 0 }
+      { x: 1492, y: 0 },
     ],
     frameWidth: 373,
-    frameHeight: 430
-  }
+    frameHeight: 430,
+  },
 };
 
 let virusSprites = {};
@@ -267,14 +267,12 @@ let hitboxes = [
 ];
 
 function preload() {
-
   tirosSprites = {
     direita: loadImage("Assets/Tiro/Tiro - Direita.png"),
-    cima: loadImage("Assets/Tiro/Sprite.png"),
     baixo: loadImage("Assets/Tiro/Tiro - Baixo.png"),
   };
 
-  somTiro = loadSound("Assets/audio/tiro.mp3")
+  somTiro = loadSound("Assets/audio/tiro.mp3");
   cenario = loadImage("Assets/cenário/cenario.png");
 
   fonte = loadFont("Assets/font/PixelifySans-VariableFont_wght.ttf");
@@ -526,12 +524,10 @@ function criarBug() {
   let local = random(locaisSpawn);
 
   bugs.push(new Inimigo(local.x, local.y, null, animacoesBug));
-
 }
 
 // CRIAR VÍRUS
 function criarVirus() {
-
   let locaisSpawn = [
     { x: 0, y: height * 0.27 },
     { x: 0, y: height * 0.3 },
@@ -628,7 +624,6 @@ function draw() {
       tempoTransicaoRound = millis();
     }
 
-
     // Espera 5 segundos antes de anunciar a próxima rodada.
     if (estadoRound === "transicao" && millis() - tempoTransicaoRound >= 5000) {
       roundAtual++;
@@ -652,7 +647,6 @@ function draw() {
       } else if (roundAtual === 3) {
         estadoRound = "round3";
         tempoUltimoSpawnVirus = millis();
-
       }
     }
 
@@ -842,10 +836,7 @@ function draw() {
     telaFinal();
   }
 
-  if (
-    estadoJogo === "jogando" &&
-    estadoRound === "warning"
-  ) {
+  if (estadoJogo === "jogando" && estadoRound === "warning") {
     mostrarWarning();
   }
 }
@@ -963,7 +954,6 @@ function iniciarJogo() {
   totalVirusWarning = 0;
   tempoUltimoSpawnWarning = 0;
   tempoInicioWarning = 0;
-
 
   jogador.x = width / 2;
   jogador.y = height * 0.65;
@@ -1222,4 +1212,3 @@ function windowResized() {
 
   posicionarServidor();
 }
-
