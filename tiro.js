@@ -10,12 +10,11 @@ class Tiro {
     this.altura = 20;
     this.dano = 10;
 
-    // Para a esquerda, utiliza o sprite da direita.
-    this.sprite =
-      direcao === "esquerda" ? tirosSprites.direita : tirosSprites[direcao];
-
-    this.sprite =
-      direcao === "cima" ? tirosSprites.baixo : tirosSprites[direcao];
+    // Para a esquerda, reutiliza o sprite da direita e o espelha ao desenhar.
+    // Para cima, reutiliza o sprite de baixo.
+    const direcaoSprite =
+      direcao === "esquerda" ? "direita" : direcao === "cima" ? "baixo" : direcao;
+    this.sprite = tirosSprites[direcaoSprite];
 
     this.frameAtual = 0;
     this.intervaloFrame = 80;
